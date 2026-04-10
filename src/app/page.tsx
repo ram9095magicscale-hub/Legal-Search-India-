@@ -64,8 +64,8 @@ export default function Home() {
 
             {/* Super Header / Trust Badge - Delayed to match paper reveal */}
             <motion.div
-              initial={{ opacity: 0, lg: { x: -20 }, y: 20 }}
-              animate={{ opacity: 1, lg: { x: 0 }, y: 0 }}
+              initial={{ opacity: 0, x: -20, y: 20 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
               transition={{ duration: 0.8, delay: 3 }}
               className="inline-flex items-center mx-auto lg:mx-0 gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest mb-6"
             >

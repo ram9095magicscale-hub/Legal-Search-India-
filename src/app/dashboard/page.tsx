@@ -14,7 +14,9 @@ export default function ClientDashboardPage() {
     documents: 0,
     completedOrders: 0,
     progress: 0,
-    recentOrder: null as any
+    recentOrder: null as any,
+    assignedAgent: null as any,
+    recentDocuments: [] as any[]
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
 

@@ -3,6 +3,7 @@ import mongoose, { Document, Model, Schema } from 'mongoose';
 export interface IOrder extends Document {
   orderId: string; // Task ID
   orderName: string;
+  description?: string;
   clientId: mongoose.Types.ObjectId;
   staffId?: mongoose.Types.ObjectId;
   status: 'pending' | 'in-progress' | 'completed' | 'cancelled';
@@ -27,6 +28,9 @@ const OrderSchema: Schema<IOrder> = new Schema(
     orderName: {
       type: String,
       required: true,
+    },
+    description: {
+      type: String,
     },
     clientId: {
       type: Schema.Types.ObjectId,

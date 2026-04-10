@@ -83,8 +83,8 @@ export default function ProfilePage() {
       
       if (res.ok) {
         const data = await res.json();
-        setFormData(prev => ({ ...prev, photo: data.photoUrl }));
-        setUser(prev => ({ ...prev, photo: data.photoUrl }));
+        setFormData((prev: any) => ({ ...prev, photo: data.photoUrl }));
+        setUser((prev: any) => ({ ...prev, photo: data.photoUrl }));
       }
     } catch (err) {
       console.error('Photo upload failed:', err);
