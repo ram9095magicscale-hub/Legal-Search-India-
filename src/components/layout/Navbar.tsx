@@ -27,6 +27,9 @@ export default function Navbar() {
   const [userName, setUserName] = useState('');
   const pathname = usePathname();
 
+  // Premium: Hide main navbar when inside dashboads to avoid interface noise
+  const isDashboard = pathname.startsWith('/admin') || pathname.startsWith('/staff') || pathname.startsWith('/dashboard');
+
   const handleLogout = () => {
     document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "user-role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -52,7 +55,7 @@ export default function Navbar() {
 
   const isDark = mounted && resolvedTheme === 'dark';
 
-  if (!mounted) return null;
+  if (!mounted || isDashboard) return null;
 
   return (
     <nav 
@@ -225,13 +228,21 @@ export default function Navbar() {
             ))}
             <div className="pt-4 flex flex-col space-y-3">
               {isLoggedIn ? (
-                <Link
-                  href={userRole === 'admin' ? '/admin' : userRole === 'staff' ? '/staff' : '/dashboard'}
-                  className="block text-center text-sm font-bold bg-primary text-white py-3 rounded-lg shadow-lg"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Go to Dashboard
-                </Link>
+                <div className="flex flex-col gap-3">
+                  <Link
+                    href={userRole === 'admin' ? '/admin' : userRole === 'staff' ? '/staff' : '/dashboard'}
+                    className="block text-center text-sm font-bold bg-primary text-white py-4 rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Go to Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center justify-center gap-2 text-sm font-bold text-destructive py-4 rounded-xl border border-destructive/20 bg-destructive/5 hover:bg-destructive hover:text-white transition-all"
+                  >
+                    <LogOut className="w-4 h-4" /> Sign Out
+                  </button>
+                </div>
               ) : (
                 <>
                   <Link

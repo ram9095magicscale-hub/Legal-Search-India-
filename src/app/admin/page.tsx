@@ -9,7 +9,8 @@ export default function AdminDashboardPage() {
     totalClients: 0,
     totalStaff: 0,
     totalOrders: 0,
-    totalRevenue: 0
+    totalRevenue: 0,
+    recentOrders: []
   });
   const [loading, setLoading] = useState(true);
 
@@ -43,7 +44,7 @@ export default function AdminDashboardPage() {
       {/* Header section with minimal title */}
       <div>
         <h1 className="text-4xl font-black text-foreground tracking-tight italic">Dashboard <span className="text-primary text-2xl not-italic font-bold ml-2 opacity-50">/ Overview</span></h1>
-        <p className="text-muted-foreground mt-2 font-medium">Global analytics and operational control panel.</p>
+        <p className="text-muted-foreground mt-2 font-medium">Global analytics and management dashboard.</p>
       </div>
 
       {/* Modern Stats Grid */}
@@ -92,35 +93,42 @@ export default function AdminDashboardPage() {
                 <tr className="bg-muted/10 border-b border-border/30 text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-black">
                   <th className="px-8 py-5">Client Name</th>
                   <th className="px-8 py-5">Service</th>
-                  <th className="px-8 py-5">Workflow Status</th>
+                  <th className="px-8 py-5">Status</th>
                   <th className="px-8 py-5 text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/20">
-                {[
-                  { name: "Rahul Sharma", email: "rahul@example.com", service: "FSSAI-Gov", status: "In Progress", tag: "bg-blue-500/10 text-blue-500 border-blue-500/20" },
-                  { name: "Priya Desai", email: "priya@corp.in", service: "Trademark", status: "Reviewing", tag: "bg-amber-500/10 text-amber-500 border-amber-500/20" },
-                  { name: "Amit Patel", email: "amit.p@gmail.com", service: "GST Filing", status: "Completed", tag: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" },
-                  { name: "Neha Singh", email: "neha@startup.io", service: "Incorporation", status: "Pending", tag: "bg-rose-500/10 text-rose-500 border-rose-500/20" },
-                ].map((row, i) => (
-                  <tr key={i} className="hover:bg-muted/10 transition-colors group">
-                    <td className="px-8 py-6">
-                      <p className="font-bold text-foreground group-hover:text-primary transition-colors">{row.name}</p>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">{row.email}</p>
-                    </td>
-                    <td className="px-8 py-6">
-                      <span className="text-[11px] font-bold text-muted-foreground">{row.service}</span>
-                    </td>
-                    <td className="px-8 py-6">
-                      <span className={`text-[9px] font-black px-3 py-1.5 rounded-full uppercase border ${row.tag}`}>{row.status}</span>
-                    </td>
-                    <td className="px-8 py-6 text-right">
-                      <button className="px-5 py-2.5 bg-foreground text-background font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-105 transition-all">
-                        Details
-                      </button>
+                {stats.recentOrders.length > 0 ? (
+                  stats.recentOrders.map((order: any, i: number) => (
+                    <tr key={i} className="hover:bg-muted/10 transition-colors group">
+                      <td className="px-8 py-6">
+                        <p className="font-bold text-foreground group-hover:text-primary transition-colors">{order.clientId?.name || 'Unknown Client'}</p>
+                        <p className="text-[10px] text-muted-foreground mt-0.5">{order.clientId?.email || 'N/A'}</p>
+                      </td>
+                      <td className="px-8 py-6">
+                        <span className="text-[11px] font-bold text-muted-foreground">{order.orderName}</span>
+                      </td>
+                      <td className="px-8 py-6">
+                        <span className={`text-[9px] font-black px-3 py-1.5 rounded-full uppercase border ${
+                          order.status === 'completed' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+                          order.status === 'cancelled' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' :
+                          'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                        }`}>{order.status}</span>
+                      </td>
+                      <td className="px-8 py-6 text-right">
+                        <button className="px-5 py-2.5 bg-foreground text-background font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-105 transition-all">
+                          Details
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="px-8 py-20 text-center text-muted-foreground italic font-medium opacity-50">
+                       Waiting for incoming operations...
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -132,14 +140,14 @@ export default function AdminDashboardPage() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
               
               <h3 className="text-xl font-black text-foreground italic flex items-center gap-3">
-                <ShieldCheck className="w-5 h-5 text-primary" /> Operational Status
+                <ShieldCheck className="w-5 h-5 text-primary" /> System Status
               </h3>
 
               <div className="space-y-6">
                 {[
-                  { label: "Active Nodes", val: "Online", color: "text-emerald-500" },
+                  { label: "Staff Status", val: "Online", color: "text-emerald-500" },
                   { label: "System Load", val: "Optimal", color: "text-blue-500" },
-                  { label: "Security Trace", val: "Nominal", color: "text-emerald-500" },
+                  { label: "Database", val: "Healthy", color: "text-emerald-500" },
                 ].map((node, i) => (
                   <div key={i} className="flex justify-between items-center p-4 bg-background/50 rounded-[24px] border border-border/30">
                     <span className="text-xs font-bold text-muted-foreground uppercase">{node.label}</span>

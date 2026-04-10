@@ -3,12 +3,16 @@ import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import dbConnect from '@/lib/mongodb';
 import { User } from '@/models/User';
+import { Order } from '@/models/Order';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-for-development';
 
 // GET all users
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+    const hasOrders = searchParams.get('hasOrders') === 'true';
+
     await dbConnect();
     const cookieStore = await cookies();
     const token = cookieStore.get('auth-token')?.value;
@@ -22,8 +26,14 @@ export async function GET() {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Fetch all users sorted by latest
-    const users = await User.find({}).sort({ createdAt: -1 }).select('-passwordHash');
+    let query: any = {};
+    if (hasOrders) {
+      const activeClientIds = await Order.distinct('clientId');
+      query._id = { $in: activeClientIds };
+    }
+
+    // Fetch users sorted by latest
+    const users = await User.find(query).sort({ createdAt: -1 }).select('-passwordHash');
 
     return NextResponse.json({ users });
   } catch (error) {

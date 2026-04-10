@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import DashboardPaddingWrapper from "@/components/layout/DashboardPaddingWrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -11,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Legal Search India | Premium Legal SaaS",
+  title: "Legal Search India | Grow Your Business Legally",
   description: "One stop platform for company registration, trademark, FSSAI, and GST.",
 };
 
@@ -32,9 +33,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <main className="flex-1 pt-20">
+          <DashboardPaddingWrapper>
             {children}
-          </main>
+          </DashboardPaddingWrapper>
           <Footer />
         </ThemeProvider>
       </body>

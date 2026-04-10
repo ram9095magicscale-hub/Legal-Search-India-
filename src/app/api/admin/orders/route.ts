@@ -2,9 +2,7 @@ import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import dbConnect from '@/lib/mongodb';
-import { User } from '@/models/User';
 import { Order } from '@/models/Order';
-import { Transaction } from '@/models/Transaction';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-for-development';
 
@@ -19,29 +17,18 @@ export async function GET() {
     }
 
     const decoded = jwt.verify(token, JWT_SECRET) as any;
-    if (decoded.role !== 'admin') {
+    if (decoded.role !== 'admin' && decoded.role !== 'staff') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const [totalClients, totalStaff, totalOrders, transactions, recentOrders] = await Promise.all([
-      User.countDocuments({ role: 'client' }),
-      User.countDocuments({ role: { $in: ['staff', 'admin'] } }),
-      Order.countDocuments(),
-      Transaction.find({ status: 'success' }),
-      Order.find().sort({ createdAt: -1 }).limit(5).populate('clientId', 'name email')
-    ]);
+    const orders = await Order.find()
+      .populate('clientId', 'name email')
+      .populate('staffId', 'name phone')
+      .sort({ createdAt: -1 });
 
-    const totalRevenue = transactions.reduce((sum, t) => sum + t.amount, 0);
-
-    return NextResponse.json({
-      totalClients,
-      totalStaff,
-      totalOrders,
-      totalRevenue,
-      recentOrders
-    });
+    return NextResponse.json({ orders });
   } catch (error) {
-    console.error('Fetch Admin Stats Error:', error);
+    console.error('Fetch Admin Orders Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

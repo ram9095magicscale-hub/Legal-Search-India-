@@ -22,12 +22,52 @@ export async function GET() {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Find only staff and admins (personnel)
-    const staff = await User.find({ role: { $in: ['staff', 'admin'] } }).sort({ createdAt: -1 }).select('-passwordHash');
+    // Find only operational staff (Exclude Admins)
+    const staff = await User.find({ role: 'staff' }).sort({ createdAt: -1 }).select('-passwordHash');
 
     return NextResponse.json({ staff });
   } catch (error) {
     console.error('Fetch Staff Error:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+export async function PATCH(req: Request) {
+  try {
+    await dbConnect();
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth-token')?.value;
+
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    if (decoded.role !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    const { userId, ...updateData } = await req.json();
+
+    if (!userId) {
+      return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
+    }
+
+    // Hash password if it's being updated
+    if (updateData.password) {
+      updateData.passwordHash = await bcrypt.hash(updateData.password, 10);
+      delete updateData.password;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true }).select('-passwordHash');
+
+    if (!updatedUser) {
+      return NextResponse.json({ error: 'Staff member not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: 'Staff member updated successfully', staff: updatedUser });
+  } catch (error) {
+    console.error('Update Staff Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
