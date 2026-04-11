@@ -15,6 +15,7 @@ const navLinks = [
   { name: 'Services', href: '/services' },
   { name: 'Blogs', href: '/blogs' },
   { name: 'Career', href: '/career' },
+  { name: 'Contact', href: '/contact' },
 ];
 
 export default function Navbar() {

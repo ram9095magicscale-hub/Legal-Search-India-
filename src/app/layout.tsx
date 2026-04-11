@@ -6,14 +6,16 @@ import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import DashboardPaddingWrapper from "@/components/layout/DashboardPaddingWrapper";
 
+import { SITE_CONFIG } from "@/lib/constants";
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Legal Search India | Grow Your Business Legally",
-  description: "One stop platform for company registration, trademark, FSSAI, and GST.",
+  title: `${SITE_CONFIG.name} | Grow Your Business Legally`,
+  description: SITE_CONFIG.description,
 };
 
 export default function RootLayout({

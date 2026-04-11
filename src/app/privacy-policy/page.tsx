@@ -1,10 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { CONTACT_DETAILS, SITE_CONFIG } from '@/lib/constants';
 
 export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen pt-0 pb-24 bg-background">
+    <div className="min-h-screen pt-24 pb-24 bg-background">
       <div className="container mx-auto px-4 max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -21,7 +22,7 @@ export default function PrivacyPolicy() {
             <section>
               <h2 className="text-2xl font-bold mb-4 text-foreground">1. Introduction</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                At Legal Search India, we are committed to actively protecting your digital privacy. This Privacy Policy outlines how we securely collect, use, process, and safeguard your personal and sensitive corporate data across our platform.
+                At {SITE_CONFIG.name}, we are committed to actively protecting your digital privacy. This Privacy Policy outlines how we securely collect, use, process, and safeguard your personal and sensitive corporate data across our platform.
               </p>
             </section>
 
@@ -40,7 +41,7 @@ export default function PrivacyPolicy() {
             <section>
               <h2 className="text-2xl font-bold mb-4 text-foreground">3. How We Secure Your Data</h2>
               <p className="text-muted-foreground leading-relaxed mb-4 flex flex-col gap-4">
-                <span>All documents uploaded to Legal Search India are protected via AES-256 military-grade encryption at rest. Network transit is locked down using strict TLS 1.3 cryptographic protocols.</span>
+                <span>All documents uploaded to {SITE_CONFIG.name} are protected via AES-256 military-grade encryption at rest. Network transit is locked down using strict TLS 1.3 cryptographic protocols.</span>
                 <span>We do completely automated wiping of non-regulatory residual data per Indian IT ACT directives. Third-party contractors are strictly vetted and legally prohibited from replicating your digital assets.</span>
               </p>
             </section>
@@ -48,7 +49,7 @@ export default function PrivacyPolicy() {
             <section>
               <h2 className="text-2xl font-bold mb-4 text-foreground">4. Contact Us</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                If you have concerns or queries regarding your digital footprint, you may instantly escalate a ticket via your dashboard or email our Data Protection Officer at privacy@legalsearchindia.com.
+                If you have concerns or queries regarding your digital footprint, you may instantly escalate a ticket via your dashboard or email our Data Protection Officer at <a href={`mailto:${CONTACT_DETAILS.privacyEmail}`} className="text-primary hover:underline">{CONTACT_DETAILS.privacyEmail}</a>.
               </p>
             </section>
           </div>
