@@ -1,81 +1,76 @@
 'use client';
 
-import { Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
-import { Briefcase, MapPin, UploadCloud, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Briefcase, MapPin, UploadCloud, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
-const jobsData: Record<string, any> = {
-  "Senior Corporate Lawyer": {
-    department: "Legal & Compliance",
-    type: "Full-Time",
-    location: "Bengaluru / Remote",
-    desc: "Lead complex corporate restructuring, handle GST disputes, and manage overarching SaaS compliance matrices.",
-    reqs: [
-      "LLB/LLM with minimum 7 years of corporate experience.",
-      "Expertise in Indian Taxation Law (GST, FSSAI).",
-      "Experience representing clients in high court or tribunals.",
-      "Strong analytical and documentation skills."
-    ]
-  },
-  "Next.js Frontend Engineer": {
-    department: "Engineering",
-    type: "Full-Time",
-    location: "Remote",
-    desc: "Build highly performant, accessible, and gorgeous glassmorphic UIs for our core registration dashboard.",
-    reqs: [
-      "3+ years experience with React and Next.js App Router.",
-      "Deep understanding of Tailwind CSS and Framer Motion.",
-      "Obsession with pixel-perfect design and 3D web-GL interactions.",
-      "Experience interfacing with complex secure REST APIs."
-    ]
-  },
-  "Tax Consultant (CA)": {
-    department: "Finance",
-    type: "Part-Time",
-    location: "Mumbai",
-    desc: "Assist clients dynamically with end-of-year tax planning and complex GST return audits.",
-    reqs: [
-      "Must be a certified Chartered Accountant (ICAI).",
-      "Strong understanding of B2B and B2C invoice mapping.",
-      "Ability to handle multiple clients concurrently during tax-season.",
-      "Excellent client-facing communication skills."
-    ]
-  },
-  "Customer Success Executive": {
-    department: "Support",
-    type: "Full-Time",
-    location: "Remote",
-    desc: "Act as the first line of defense, guiding users through the FSSAI and Trademark application flows.",
-    reqs: [
-      "Impeccable spoken and written English and Hindi.",
-      "Empathy-driven problem solving mindset.",
-      "Ability to understand basic legal SaaS terminology.",
-      "Prior experience in B2B SaaS Support is a plus."
-    ]
-  },
-  "Open Application": {
+function ApplicationContent() {
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get('id');
+  
+  const [job, setJob] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  const openAppDefault = {
+    role: "Open Application",
     department: "General",
     type: "Flexible",
     location: "Anywhere",
     desc: "We are always looking for exceptional talent. If you have unique skills that would accelerate Legal Search India, pitch us!",
-    reqs: [
+    requirements: [
       "A relentless drive to build something impactful.",
       "Strong problem-solving skills.",
       "Ability to adapt in a fast-paced legal-tech environment.",
       "A clear vision of how you can contribute."
     ]
-  }
-};
+  };
 
-function ApplicationContent() {
-  const searchParams = useSearchParams();
-  const roleQuery = searchParams.get('role');
-  
-  // If no specific role is passed, default to Open Application
-  const roleName = roleQuery && jobsData[roleQuery] ? roleQuery : "Open Application";
-  const job = jobsData[roleName];
+  useEffect(() => {
+    const fetchJob = async () => {
+      if (!jobId) {
+        setJob(openAppDefault);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/jobs/${jobId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setJob(data);
+        } else {
+          setJob(openAppDefault);
+        }
+      } catch (err) {
+        console.error('Failed to fetch job details', err);
+        setJob(openAppDefault);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJob();
+  }, [jobId]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 animate-pulse">
+        <div className="lg:w-5/12 space-y-8">
+           <div className="h-4 w-32 bg-muted rounded-md mb-8" />
+           <div className="h-6 w-24 bg-primary/10 rounded-full mb-4" />
+           <div className="h-12 w-full bg-muted rounded-xl mb-6" />
+           <div className="h-24 w-full bg-muted rounded-xl mb-12" />
+           <div className="space-y-4">
+              <div className="h-8 w-1/2 bg-muted rounded-md" />
+              {[...Array(4)].map((_, i) => <div key={i} className="h-4 w-full bg-muted rounded-md" />)}
+           </div>
+        </div>
+        <div className="lg:w-7/12 h-[600px] bg-card/50 border border-border/30 rounded-3xl" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
@@ -89,7 +84,7 @@ function ApplicationContent() {
         <div>
           <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest rounded-full mb-4 inline-block">{job.department}</span>
           <h1 className="text-4xl md:text-5xl font-black mb-6 text-foreground tracking-tight leading-tight">
-            {roleName}
+            {job.role}
           </h1>
           
           <div className="flex flex-wrap items-center gap-6 text-sm text-foreground font-medium uppercase tracking-wide mb-8">
@@ -106,7 +101,7 @@ function ApplicationContent() {
 
           <h3 className="text-xl font-bold mb-4 text-foreground">Key Requirements</h3>
           <ul className="space-y-4">
-            {job.reqs.map((req: string, i: number) => (
+            {job.requirements?.map((req: string, i: number) => (
               <li key={i} className="flex gap-3 text-muted-foreground">
                 <CheckCircle2 className="text-primary w-5 h-5 flex-shrink-0 mt-0.5" />
                 <span>{req}</span>
@@ -149,8 +144,8 @@ function ApplicationContent() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">LinkedIn / Portfolio URL *</label>
-              <input required type="url" className="w-full px-4 py-3 bg-muted/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="https://linkedin.com/in/..." />
+              <label className="text-sm font-semibold text-foreground">LinkedIn / Portfolio URL</label>
+              <input type="url" className="w-full px-4 py-3 bg-muted/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="https://linkedin.com/in/..." />
             </div>
 
             <div className="space-y-2">
@@ -160,12 +155,12 @@ function ApplicationContent() {
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-foreground">Resume / CV *</label>
-              <div className="w-full border-2 border-dashed border-border/60 rounded-xl p-8 flex flex-col items-center justify-center bg-muted/20 hover:bg-muted/40 transition-colors cursor-pointer group">
+              <label className="w-full border-2 border-dashed border-border/60 rounded-xl p-8 flex flex-col items-center justify-center bg-muted/20 hover:bg-muted/40 transition-colors cursor-pointer group">
                 <UploadCloud className="w-10 h-10 text-muted-foreground group-hover:text-primary transition-colors mb-3" />
                 <p className="text-sm font-medium text-foreground">Click to upload or drag and drop</p>
                 <p className="text-xs text-muted-foreground mt-1">PDF, DOCX up to 5MB</p>
                 <input required type="file" className="hidden" accept=".pdf,.doc,.docx" />
-              </div>
+              </label>
             </div>
 
             <button type="submit" className="w-full py-4 bg-primary text-primary-foreground font-bold rounded-xl hover:bg-primary/90 transition-all shadow-[0_10px_20px_-10px_hsl(var(--primary)/0.6)]">

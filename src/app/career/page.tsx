@@ -1,40 +1,31 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase, MapPin, Clock } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CareerPage() {
-  const jobs = [
-    {
-      role: "Senior Corporate Lawyer",
-      type: "Full-Time",
-      location: "Bengaluru / Remote",
-      department: "Legal & Compliance",
-      desc: "Lead complex corporate restructuring, handle GST disputes, and manage overarching SaaS compliance matrices."
-    },
-    {
-      role: "Next.js Frontend Engineer",
-      type: "Full-Time",
-      location: "Remote",
-      department: "Engineering",
-      desc: "Build highly performant, accessible, and gorgeous glassmorphic UIs for our core registration dashboard."
-    },
-    {
-      role: "Tax Consultant (CA)",
-      type: "Part-Time",
-      location: "Mumbai",
-      department: "Finance",
-      desc: "Assist clients dynamically with end-of-year tax planning and complex GST return audits."
-    },
-    {
-      role: "Customer Success Executive",
-      type: "Full-Time",
-      location: "Remote",
-      department: "Support",
-      desc: "Act as the first line of defense, guiding users through the FSSAI and Trademark application flows."
-    }
-  ];
+  const [jobs, setJobs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const res = await fetch('/api/jobs');
+        if (res.ok) {
+          const data = await res.json();
+          // Only show 'Open' jobs publicly
+          setJobs(data.filter((j: any) => j.status === 'Open'));
+        }
+      } catch (err) {
+        console.error('Failed to fetch jobs', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchJobs();
+  }, []);
 
   return (
     <div className="min-h-screen pt-0 pb-24 bg-background">
@@ -61,11 +52,17 @@ export default function CareerPage() {
 
       {/* Grid */}
       <section className="container mx-auto px-4 max-w-5xl">
-        {jobs.length > 0 ? (
+        {loading ? (
+          <div className="flex flex-col gap-6">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="w-full h-40 bg-card/50 border border-border/30 rounded-3xl animate-pulse" />
+            ))}
+          </div>
+        ) : jobs.length > 0 ? (
           <div className="flex flex-col gap-6">
             {jobs.map((job, i) => (
               <motion.div
-                key={i}
+                key={job._id || i}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
@@ -84,7 +81,7 @@ export default function CareerPage() {
                 </div>
                 
                 <div className="md:w-1/3 flex md:justify-end">
-                  <Link href={`/career/apply?role=${encodeURIComponent(job.role)}`} className="w-full md:w-auto text-center px-8 py-4 bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-bold rounded-xl transition-all">
+                  <Link href={`/career/apply?id=${job._id}`} className="w-full md:w-auto text-center px-8 py-4 bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-bold rounded-xl transition-all">
                     Apply Now
                   </Link>
                 </div>
@@ -123,3 +120,4 @@ export default function CareerPage() {
     </div>
   );
 }
+

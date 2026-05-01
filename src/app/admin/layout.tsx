@@ -15,7 +15,9 @@ import {
   Menu, 
   X, 
   IndianRupee,
-  LayoutDashboard
+  LayoutDashboard,
+  BookOpen,
+  Briefcase
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
@@ -53,6 +55,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: '/admin/revenue', label: 'Revenue & Accounts', icon: IndianRupee, color: 'text-amber-500' },
     { href: '/admin/staff', label: 'Staff Control', icon: ShieldCheck, color: 'text-primary' },
     { href: '/admin/tasks', label: 'Task Tracker', icon: ClipboardList, color: 'text-purple-500' },
+    { href: '/admin/blogs', label: 'Blog Management', icon: BookOpen, color: 'text-orange-500' },
+    { href: '/admin/jobs', label: 'Career Management', icon: Briefcase, color: 'text-indigo-500' },
   ];
 
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);

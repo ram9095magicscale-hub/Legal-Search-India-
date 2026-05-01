@@ -19,3 +19,4 @@ export const SITE_CONFIG = {
   description: "Your one-stop premium platform for GST, FSSAI, and Trademark registrations.",
   url: "https://legalsearchindia.com",
 };
+
