@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // 1. Get user role and authentication status from cookies
   // In a real app, you would verify a JWT token from the cookie
   const userRole = request.cookies.get('user-role')?.value;

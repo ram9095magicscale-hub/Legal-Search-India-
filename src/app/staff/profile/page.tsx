@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { User, Mail, Phone, Shield, Camera, Save, CheckCircle2 } from 'lucide-react';
 
 export default function StaffProfilePage() {
@@ -60,7 +61,16 @@ export default function StaffProfilePage() {
         <div className="relative group">
           <div className="w-32 h-32 rounded-3xl bg-emerald-500/20 flex items-center justify-center border-2 border-emerald-500/20 overflow-hidden shadow-lg">
             {formData.photo ? (
-              <img src={formData.photo} alt="Profile" className="w-full h-full object-cover" />
+              <div className="relative w-full h-full">
+                <Image 
+                  src={formData.photo} 
+                  alt="Profile" 
+                  fill 
+                  className="object-cover" 
+                  unoptimized={formData.photo.startsWith('data:')}
+                  sizes="128px"
+                />
+              </div>
             ) : (
               <User className="w-16 h-16 text-emerald-600" />
             )}

@@ -126,6 +126,9 @@ export default function Navbar() {
                   <button 
                     onClick={() => setShowDropdown(!showDropdown)}
                     className="pl-2 pr-5 py-2.5 text-xs font-black text-primary hover:bg-primary/5 transition-all rounded-r-full uppercase tracking-tight flex items-center gap-2"
+                    aria-expanded={showDropdown}
+                    aria-haspopup="true"
+                    aria-label="User profile menu"
                   >
                     <span className="max-w-[100px] truncate">{userName.split(' ')[0]}</span>
                     <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${showDropdown ? 'rotate-180' : ''}`} />
@@ -173,6 +176,7 @@ export default function Navbar() {
                   onClick={handleLogout}
                   className="p-2.5 bg-destructive/10 text-destructive rounded-full hover:bg-destructive hover:text-white transition-all border border-destructive/20 group"
                   title="Sign Out"
+                  aria-label="Sign Out"
                 >
                   <LogOut className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 </button>
@@ -201,6 +205,8 @@ export default function Navbar() {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-foreground hover:text-primary transition-colors focus:outline-none"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>

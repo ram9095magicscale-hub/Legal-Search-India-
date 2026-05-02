@@ -29,7 +29,7 @@ export default function LoginPage() {
       if (!res.ok) throw new Error(data.error || 'Login failed');
       
       // Cookies are handled by the server (Next.js action/response context)
-      // but if the middleware needs them immediately, redirected routes will see them.
+      // but if the proxy needs them immediately, redirected routes will see them.
       if (data.user.role === 'admin') {
         router.push('/admin');
       } else if (data.user.role === 'staff') {

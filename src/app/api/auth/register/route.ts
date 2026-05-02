@@ -75,7 +75,7 @@ export async function POST(req: Request) {
       path: '/',
     });
 
-    // Set session cookie for middleware
+    // Set session cookie for proxy
     response.cookies.set('session', 'true', {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',

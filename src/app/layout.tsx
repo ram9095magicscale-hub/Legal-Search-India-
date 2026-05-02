@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import DashboardPaddingWrapper from "@/components/layout/DashboardPaddingWrapper";
+import Script from 'next/script';
 
 import { SITE_CONFIG } from "@/lib/constants";
 
@@ -99,7 +100,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <script
+          <Script
+            id="structured-data"
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: JSON.stringify({

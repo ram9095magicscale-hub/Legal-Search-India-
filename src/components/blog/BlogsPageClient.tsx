@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function BlogsPageClient() {
   const [articles, setArticles] = useState<any[]>([]);
@@ -70,9 +71,12 @@ export default function BlogsPageClient() {
               >
                 <div className="w-full md:w-2/5 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden relative flex-shrink-0">
                   <div className="absolute inset-0 bg-primary/20 mix-blend-overlay group-hover:bg-transparent transition-all z-10" />
-                  <div 
-                    className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
-                    style={{ backgroundImage: `url('${article.image}')` }}
+                  <Image 
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    sizes="(max-width: 768px) 100vw, 40vw"
                   />
                 </div>
                 
@@ -82,9 +86,9 @@ export default function BlogsPageClient() {
                     <span className="text-xs text-muted-foreground">{article.readTime}</span>
                   </div>
                   
-                  <h3 className="text-xl lg:text-2xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors leading-tight">
+                  <h2 className="text-xl lg:text-2xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors leading-tight">
                     {article.title}
-                  </h3>
+                  </h2>
                   <p className="text-sm text-muted-foreground mb-6 line-clamp-2">{article.desc}</p>
                   
                   <span className="text-xs font-bold text-muted-foreground mt-auto flex items-center gap-2">

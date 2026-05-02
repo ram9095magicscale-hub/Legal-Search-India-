@@ -360,7 +360,7 @@ function SceneContent() {
       <LegalStamp trigger={isApproved} onHit={() => setStampHit(true)} />
 
       <Environment preset={isDark ? "city" : "studio"} />
-      <ContactShadows position={[0, -3.5, 0]} opacity={0.6} scale={40} blur={2.5} far={10} color={isDark ? "#000000" : "#1e293b"} />
+      <ContactShadows resolution={512} position={[0, -3.5, 0]} opacity={0.6} scale={40} blur={2.5} far={10} color={isDark ? "#000000" : "#1e293b"} />
     </>
   );
 }
@@ -368,7 +368,7 @@ function SceneContent() {
 export default function ThreeScene() {
   return (
     <div className="absolute inset-0 z-0 pointer-events-none transition-all duration-1000 overflow-hidden">
-      <Canvas camera={{ position: [0, 0, 10], fov: 35 }} dpr={[1, 2]} shadows={{ type: THREE.PCFShadowMap }}>
+      <Canvas camera={{ position: [0, 0, 10], fov: 35 }} dpr={[1, 1.5]} shadows={{ type: THREE.PCFSoftShadowMap }}>
         <Suspense fallback={null}>
           <SceneContent />
         </Suspense>

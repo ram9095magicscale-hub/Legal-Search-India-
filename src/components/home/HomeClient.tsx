@@ -1,7 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import ThreeScene from '@/components/ui/ThreeScene';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+const ThreeScene = dynamic(() => import('@/components/ui/ThreeScene'), { 
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-primary/5 animate-pulse" />
+});
 import ServiceCard from '@/components/ui/ServiceCard';
 import {
   Building2,
@@ -166,10 +171,12 @@ export default function HomeClient() {
               >
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-transparent mix-blend-overlay z-10 pointer-events-none" />
                 <div className="absolute inset-0 ring-1 ring-inset ring-white/10 z-20 rounded-[inherit]" />
-                <img 
+                <Image 
                   src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800" 
                   alt="Akash Verma - CEO & Founder of Legal Search India"
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                  fill
+                  className="object-cover transition-transform duration-700 hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 320px"
                 />
               </div>
             </motion.div>
@@ -192,7 +199,7 @@ export default function HomeClient() {
                 "We built this platform to completely strip away the friction. Whether you're registering for GST or filing your annual FSSAI compliance, you deserve a system that is transparent, incredibly fast, and 100% reliable. Welcome to the future of digital documentation."
               </p>
               <div>
-                <h4 className="text-xl font-bold text-foreground">Akash Verma</h4>
+                <p className="text-xl font-bold text-foreground">Akash Verma</p>
                 <p className="text-sm text-primary font-medium mt-1 uppercase tracking-wide">CEO & Founder, Legal Search India</p>
               </div>
             </motion.div>
@@ -259,7 +266,7 @@ export default function HomeClient() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.15 }}
-                className={`Relative z-10 bg-card border border-border/50 p-8 flex flex-col justify-center text-center group hover:border-primary/50 hover:shadow-[0_20px_40px_-15px_rgba(var(--primary),0.3)] transition-all duration-500 min-h-[200px] backdrop-blur-xl relative overflow-visible ${
+                className={`relative z-10 bg-card border border-border/50 p-8 flex flex-col justify-center text-center group hover:border-primary/50 hover:shadow-[0_20px_40px_-15px_rgba(var(--primary),0.3)] transition-all duration-500 min-h-[200px] backdrop-blur-xl relative overflow-visible ${
                   i % 2 === 0 
                   ? "rounded-[40px_0_40px_0] lg:-translate-y-6" 
                   : "rounded-[0_40px_0_40px] lg:translate-y-6"
@@ -309,7 +316,7 @@ export default function HomeClient() {
                         {i + 1}
                       </div>
                       <div>
-                        <h4 className="font-semibold text-foreground">{step.title}</h4>
+                        <h3 className="font-semibold text-foreground">{step.title}</h3>
                         <p className="text-sm text-muted-foreground">{step.desc}</p>
                       </div>
                     </li>
@@ -364,9 +371,12 @@ export default function HomeClient() {
               <Link href={`/blogs/${article.slug}`} key={i} className="block group rounded-2xl border border-border/50 bg-card overflow-hidden hover:shadow-[0_20px_50px_-20px_rgba(var(--primary),0.3)] hover:border-primary/50 transition-all cursor-pointer">
                 <div className="aspect-video bg-muted relative overflow-hidden">
                   <div className="absolute inset-0 bg-primary/20 mix-blend-overlay group-hover:bg-transparent transition-all duration-500 z-10" />
-                  <div 
-                    className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-700"
-                    style={{ backgroundImage: `url('${article.image}')` }}
+                  <Image 
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 </div>
                 <div className="p-6">

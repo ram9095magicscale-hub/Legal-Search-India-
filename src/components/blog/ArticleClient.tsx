@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, Clock, Calendar, Share2, Edit3 } from 'lucide-react';
 
 interface ArticleClientProps {
@@ -59,7 +60,14 @@ export default function ArticleClient({ article, isAdmin }: ArticleClientProps) 
           className="w-full aspect-[21/9] rounded-3xl overflow-hidden mb-16 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border border-border/50 relative"
         >
           <div className="absolute inset-0 bg-primary/10 mix-blend-overlay z-10" />
-          <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+          <Image 
+            src={article.image} 
+            alt={article.title} 
+            fill 
+            className="object-cover" 
+            priority
+            sizes="(max-width: 1024px) 100vw, 896px"
+          />
         </motion.div>
 
         {/* Content Body Layout */}
@@ -78,7 +86,17 @@ export default function ArticleClient({ article, isAdmin }: ArticleClientProps) 
                 return <h3 key={i} className="text-2xl font-bold text-foreground mt-8 mb-4 opacity-90" dangerouslySetInnerHTML={{ __html: parseFormatting(block.text) }} />;
               }
               if (block.type === 'image') {
-                return <img key={i} src={block.url} alt="" className="w-full rounded-2xl border border-border/50 my-8 shadow-lg" />;
+                return (
+                  <div key={i} className="relative w-full aspect-video rounded-2xl border border-border/50 my-8 shadow-lg overflow-hidden">
+                    <Image 
+                      src={block.url} 
+                      alt="" 
+                      fill 
+                      className="object-cover" 
+                      sizes="(max-width: 768px) 100vw, 672px"
+                    />
+                  </div>
+                );
               }
               if (block.type === 'ul' || block.type === 'list') {
                 return (

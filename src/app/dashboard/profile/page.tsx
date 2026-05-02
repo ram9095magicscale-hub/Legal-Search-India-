@@ -15,6 +15,8 @@ import {
   Edit3
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
+
 
 export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
@@ -138,8 +140,17 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center">
              <div className="relative group">
                 <div className="w-24 h-24 rounded-[28px] bg-background border-[4px] border-card shadow-xl overflow-hidden relative">
-                   {formData.photo ? (
-                      <img src={formData.photo} alt="Profile" className="w-full h-full object-cover" />
+                    {formData.photo ? (
+                      <div className="relative w-full h-full">
+                        <Image 
+                          src={formData.photo} 
+                          alt="Profile" 
+                          fill 
+                          className="object-cover" 
+                          unoptimized={formData.photo.startsWith('data:')}
+                          sizes="96px"
+                        />
+                      </div>
                    ) : (
                       <div className="w-full h-full flex items-center justify-center bg-primary/5">
                          <UserIcon className="w-10 h-10 text-primary/40" />

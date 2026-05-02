@@ -53,7 +53,7 @@ export default function AboutPage() {
         >
           {stats.map((stat, i) => (
             <div key={i} className="bg-card border border-border/50 rounded-3xl p-8 text-center hover:border-primary/30 transition-all hover:-translate-y-1 shadow-lg">
-              <h2 className="text-4xl md:text-5xl font-black text-foreground mb-2">{stat.value}</h2>
+              <p className="text-4xl md:text-5xl font-black text-foreground mb-2">{stat.value}</p>
               <p className="text-sm md:text-base font-medium text-muted-foreground uppercase tracking-wider">{stat.label}</p>
             </div>
           ))}
@@ -75,7 +75,13 @@ export default function AboutPage() {
             {/* Profile Image container identical to the premium aesthetic requested */}
             <div className="aspect-[4/5] relative w-full max-w-[400px] overflow-hidden bg-muted shadow-[0_30px_60px_-20px_rgba(var(--primary),0.4)] z-10 rounded-[200px_0_200px_0]">
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent mix-blend-overlay z-10 pointer-events-none" />
-              <div className="w-full h-full bg-cover bg-center transition-transform duration-700 hover:scale-105" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800')" }} />
+              <Image 
+                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800" 
+                alt="Akash Verma - CEO & Founder"
+                fill
+                className="object-cover transition-transform duration-700 hover:scale-105"
+                sizes="(max-width: 1024px) 100vw, 400px"
+              />
             </div>
           </motion.div>
 
@@ -104,7 +110,7 @@ export default function AboutPage() {
             <div className="flex items-center gap-4">
               <div className="w-12 h-1 bg-primary rounded-full"></div>
               <div>
-                <h4 className="text-2xl font-bold text-foreground">Akash Verma</h4>
+                <p className="text-2xl font-bold text-foreground">Akash Verma</p>
                 <p className="text-primary font-bold uppercase tracking-widest text-sm mt-1">CEO & Founder</p>
               </div>
             </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { 
   Building2, FileCheck2, Calculator, ArrowRight, ShieldCheck, 
   CheckCircle2, Clock, MapPin, Receipt, Factory, Utensils
@@ -128,7 +129,13 @@ export default function ServiceClient({ service, slug }: ServiceClientProps) {
               {service.sidebarImage && (
                 <div className="w-full h-48 mb-6 rounded-2xl overflow-hidden relative shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)]">
                   <div className="absolute inset-0 bg-primary/10 mix-blend-overlay z-10 hover:bg-transparent transition-colors duration-500" />
-                  <img src={service.sidebarImage} alt={service.title} className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+                  <Image 
+                    src={service.sidebarImage} 
+                    alt={service.title} 
+                    fill 
+                    className="object-cover hover:scale-110 transition-transform duration-700" 
+                    sizes="(max-width: 1024px) 100vw, 320px"
+                  />
                 </div>
               )}
               <h3 className="text-2xl font-bold mb-4 relative z-10">Ready to File?</h3>
